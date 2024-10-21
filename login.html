@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Biblioteca || Instituto Marista La Inmaculada</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+            text-transform:capitalize;
+            text-decoration:none;
+            list-style:none;
+            font-family:'Poppins';
+            
+
+        }   
+
+        body{
+            background-color:#131963;
+        }
+
+        .container{
+            max-width:1100px;
+            margin:0 auto;
+            align-items:center;
+            justify-content:center;
+        }
+
+        button {
+            background-color: #004080;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 10px;
+            cursor: pointer;
+            margin-top: 10px;
+            align-items:center;
+            justify-content:center;
+        }
+        button:hover {
+            background-color: #003366;
+        }
+        h1, h2 {
+            color:#FFFFFF;
+            text-align: center;
+        }
+        .hidden {
+            display: none;
+        }
+        .book {
+            border: 1px solid #fff;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            background: rgba(255, 255, 255, 0.1);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #fff;
+        }
+        th {
+            background-color: #0066cc;
+        }
+        tr:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        #filter-container {
+            margin-bottom: 20px;
+        }
+        select {
+            padding: 5px;
+            margin-right: 10px;
+        }
+        .delete-button {
+            background-color: #e74c3c;
+            border: none;
+            padding: 5px;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .delete-button:hover {
+            background-color: #c0392b;
+        }
+    </style>
+</head>
+<body>
+    <div id="main-container" class="container">
+        <a href="index.html"><h1>Registro || Instituto Marista la Inmaculada</h1></a>
+        <button id="alumno-btn">Ingresa como Alumno</button>
+        <button id="admin-btn">Ingresa como Jefe</button>
+    </div>
+    
+
+    <div id="login" class="container hidden">
+        <h2>Iniciar Sesión</h2>
+        <input type="text" id="user-code" placeholder="Código de usuario" />
+        <button id="login-btn">Iniciar Sesión</button>
+        <button id="back-to-main-from-login">Volver</button>
+    </div>
+
+    <div id="libros-page" class="container hidden">
+        <h2>Libros Disponibles</h2>
+        <div id="filter-container">
+            <label for="filter-select">Filtrar:</label>
+            <select id="filter-select">
+                <option value="alfabetico">Orden Alfabético</option>
+                <option value="fecha">Fecha de Modificación</option>
+            </select>
+        </div>
+        <div id="libros-container"></div>
+        <button id="back-to-main">Volver</button>
+    </div>
+
+    <div id="admin-page" class="container hidden">
+        <h2>Panel de Administrador</h2>
+        <button id="manage-books">Gestionar Libros</button>
+        <button id="view-users">Ver Usuarios</button>
+        <button id="view-log">Ver Registro de Ingresos</button>
+        <button id="logout">Cerrar Sesión</button>
+    </div>
+
+    <div id="manage-books-page" class="container hidden">
+        <h2>Gestionar Libros</h2>
+        <form id="book-form">
+            <input type="text" id="book-title" placeholder="Título" required />
+            <input type="text" id="book-description" placeholder="Descripción" required />
+            <input type="text" id="book-image" placeholder="URL de la Imagen" required />
+            
+            <select id="book-grade">
+                <option value="7mo">7mo</option>
+                <option value="8vo">8vo</option>
+                <option value="9no">9no</option>
+                <option value="10BTP">10BTP</option>
+                <option value="10bch">10BCH</option>
+                <option value="10AEB">10AEB</option>
+                <option value="11BTP">11BTP</option>
+                <option value="11BCH">11BCH</option>
+                <option value="12BTP">12BTP</option>
+                <option value="12AEB">12AEB</option>
+            </select>
+            <button type="submit">Agregar Libro</button>
+        </form>
+        <button id="back-to-admin">Volver</button>
+        <div id="books-list"></div>
+    </div>
+
+    <div id="view-users-page" class="container hidden">
+        <h2>Usuarios Registrados</h2>
+        <div id="user-table-container"></div>
+        <form id="add-user-form">
+            <input type="text" id="new-user-code" placeholder="Nuevo Código de Usuario" required />
+            <select id="new-user-grade">
+                <option value="7mo">7mo</option>
+                <option value="8vo">8vo</option>
+                <option value="9no">9no</option>
+                <option value="10BTP">10BTP</option>
+                <option value="10bch">10BCH</option>
+                <option value="10AEB">10AEB</option>
+                <option value="11BTP">11BTP</option>
+                <option value="11BCH">11BCH</option>
+                <option value="12BTP">12BTP</option>
+                <option value="12AEB">12AEB</option>
+            </select>
+            <button type="submit">Agregar Usuario</button>
+        </form>
+        <button id="back-to-admin-from-users">Volver</button>
+    </div>
+
+    <div id="view-log-page" class="container hidden">
+        <h2>Registro de Ingresos</h2>
+        <div id="log-table-container"></div>
+        <button id="back-to-admin-from-log">Volver</button>
+    </div>
+
+    <script>
+        const books = {
+            "7mo": [],
+            "8vo": [],
+            "9no": [],
+            "10BTP": [],
+            "10BCH": [],
+            "10AEB": [],
+            "11BTP": [],
+            "11BCH": [],
+            "12BTP": [],
+            "12AEB": []
+        };
+
+        const users = {
+            "7mo": ["7mo-01", "7mo-02", "7mo-03"],
+            "8vo": ["8vo-01", "8vo-02", "8vo-03"],
+            "9no": ["9no-01", "9no-02", "9no-03"],
+            "10BTP": ["10BTP-01"],
+            "10BCH": ["10BCH-01"],
+            "10AEB": ["10AEB-01", "10AEB-02"],
+            "11BTP": ["11BTP-01"],
+            "11BCH": ["11BCH-01"],
+            "12BTP": ["12BTP-01"],
+            "12AEB": ["12AEB-01", "12AEB-02",]
+        };
+
+        const logs = [];
+
+        // Iniciar sesión como alumno o administrador
+        document.getElementById('alumno-btn').addEventListener('click', () => {
+            toggleVisibility('main-container', 'login');
+        });
+
+        document.getElementById('admin-btn').addEventListener('click', () => {
+            const adminPassword = prompt("Ingrese la contraseña de administrador:");
+            if (adminPassword === 'IMLI') {
+                toggleVisibility('main-container', 'admin-page');
+            } else {
+                alert("Contraseña incorrecta.");
+            }
+        });
+
+        // Iniciar sesión
+        document.getElementById('login-btn').addEventListener('click', () => {
+            const userCode = document.getElementById('user-code').value;
+            const userGrade = userCode.split('-')[0];
+            if (users[userGrade] && users[userGrade].includes(userCode)) {
+                logs.push({ user: userCode, date: new Date().toLocaleString() });
+                toggleVisibility('login', 'libros-page');
+                displayBooksForUser();
+            } else {
+                alert("Código de usuario incorrecto.");
+            }
+        });
+
+        // Mostrar libros según el curso del usuario
+        function displayBooksForUser() {
+            const userCode = document.getElementById('user-code').value;
+            const userGrade = userCode.split('-')[0];
+            const librosContainer = document.getElementById('libros-container');
+            librosContainer.innerHTML = '';
+
+            const sortedBooks = [...books[userGrade]];
+            const filterOption = document.getElementById('filter-select').value;
+
+            // Filtrar libros según la selección
+            if (filterOption === 'alfabetico') {
+                sortedBooks.sort((a, b) => a.title.localeCompare(b.title));
+            } else if (filterOption === 'fecha') {
+                sortedBooks.sort((a, b) => new Date(b.date) - new Date(a.date));
+            }
+
+            sortedBooks.forEach(book => {
+                const bookDiv = document.createElement('div');
+                bookDiv.className = 'book';
+                bookDiv.innerHTML = `
+                    <img src="${book.image}" alt="${book.title}" style="width:100px; height:auto;">
+                    <h3>${book.title}</h3>
+                    <p>${book.description}</p>
+                    
+                `;
+                librosContainer.appendChild(bookDiv);
+            });
+        }
+
+        // Filtrar libros por selección
+        document.getElementById('filter-select').addEventListener('change', displayBooksForUser);
+
+        // Panel de administración
+        document.getElementById('manage-books').addEventListener('click', () => {
+            toggleVisibility('admin-page', 'manage-books-page');
+            displayBooksInAdmin();
+        });
+
+        document.getElementById('view-users').addEventListener('click', () => {
+            toggleVisibility('admin-page', 'view-users-page');
+            displayUsers();
+        });
+
+        document.getElementById('view-log').addEventListener('click', () => {
+            toggleVisibility('admin-page', 'view-log-page');
+            displayLog();
+        });
+
+        // Volver a la página principal
+        document.getElementById('back-to-main').addEventListener('click', () => {
+            toggleVisibility('libros-page', 'main-container');
+            document.getElementById('user-code').value = '';
+        });
+
+        // Agregar libro
+        document.getElementById('book-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const title = document.getElementById('book-title').value;
+            const description = document.getElementById('book-description').value;
+            const image = document.getElementById('book-image').value;
+            const grade = document.getElementById('book-grade').value;
+
+            const newBook = { title, description, image, date: new Date() };
+            books[grade].push(newBook);
+
+            alert("Libro agregado.");
+            displayBooksInAdmin();
+            document.getElementById('book-form').reset();
+        });
+
+        // Mostrar libros en el panel de administración
+        function displayBooksInAdmin() {
+            const booksList = document.getElementById('books-list');
+            booksList.innerHTML = '';
+
+            for (const grade in books) {
+                if (books[grade].length > 0) {
+                    const gradeDiv = document.createElement('div');
+                    gradeDiv.innerHTML = `<h3>Libros de ${grade}</h3>`;
+                    books[grade].forEach((book, index) => {
+                        const bookDiv = document.createElement('div');
+                        bookDiv.className = 'book';
+                        bookDiv.innerHTML = `
+                            <h4>${book.title}</h4>
+                            <p>${book.description}</p>
+                            <p>Fecha: ${new Date(book.date).toLocaleString()}</p>
+                            <button class="delete-book" data-grade="${grade}" data-index="${index}">Eliminar</button>
+                        `;
+                        gradeDiv.appendChild(bookDiv);
+                    });
+                    booksList.appendChild(gradeDiv);
+                }
+            }
+
+            // Manejar la eliminación de libros
+            document.querySelectorAll('.delete-book').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    const grade = e.target.dataset.grade;
+                    const index = e.target.dataset.index;
+                    books[grade].splice(index, 1);
+                    displayBooksInAdmin();
+                });
+            });
+        }
+
+        // Volver al panel de administración desde la gestión de libros
+        document.getElementById('back-to-admin').addEventListener('click', () => {
+            toggleVisibility('manage-books-page', 'admin-page');
+        });
+
+        // Mostrar usuarios
+        function displayUsers() {
+            const userTableContainer = document.getElementById('user-table-container');
+            userTableContainer.innerHTML = '<table><thead><tr><th>Curso</th><th>Usuarios</th><th>Acciones</th></tr></thead><tbody></tbody></table>';
+
+            const tbody = userTableContainer.querySelector('tbody');
+
+            for (const grade in users) {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `<td>${grade}</td><td>${users[grade].join(', ')}</td>
+                <td>
+                    <button class="delete-user" data-grade="${grade}" data-user="${users[grade].join(',')}">Eliminar</button>
+                </td>`;
+                tbody.appendChild(tr);
+            }
+
+            // Manejar el formulario de agregar usuario
+            document.getElementById('add-user-form').onsubmit = (e) => {
+                e.preventDefault();
+                const newUserCode = document.getElementById('new-user-code').value;
+                const newUserGrade = document.getElementById('new-user-grade').value;
+
+                if (!users[newUserGrade].includes(newUserCode)) {
+                    users[newUserGrade].push(newUserCode);
+                    alert("Usuario agregado.");
+                    displayUsers();
+                    document.getElementById('add-user-form').reset();
+                } else {
+                    alert("El usuario ya existe.");
+                }
+            };
+
+            // Manejar la eliminación de usuarios
+            document.querySelectorAll('.delete-user').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    const grade = e.target.dataset.grade;
+                    const userToDelete = prompt("Ingrese el código del usuario a eliminar:");
+                    const userIndex = users[grade].indexOf(userToDelete);
+                    if (userIndex > -1) {
+                        users[grade].splice(userIndex, 1);
+                        alert("Usuario eliminado.");
+                        displayUsers();
+                    } else {
+                        alert("Usuario no encontrado.");
+                    }
+                });
+            });
+        }
+
+        // Mostrar log de ingresos
+        function displayLog() {
+            const logTableContainer = document.getElementById('log-table-container');
+            logTableContainer.innerHTML = '<table><thead><tr><th>Usuario</th><th>Fecha</th></tr></thead><tbody></tbody></table>';
+            const tbody = logTableContainer.querySelector('tbody');
+
+            logs.forEach(log => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `<td>${log.user}</td><td>${log.date}</td>`;
+                tbody.appendChild(tr);
+            });
+        }
+
+        // Volver al panel de administración desde ver usuarios
+        document.getElementById('back-to-admin-from-users').addEventListener('click', () => {
+            toggleVisibility('view-users-page', 'admin-page');
+        });
+
+        // Volver al panel de administración desde ver log
+        document.getElementById('back-to-admin-from-log').addEventListener('click', () => {
+            toggleVisibility('view-log-page', 'admin-page');
+        });
+
+        // Volver al menú principal desde la pantalla de acceso
+        document.getElementById('back-to-main-from-login').addEventListener('click', () => {
+            toggleVisibility('login', 'main-container');
+            document.getElementById('user-code').value = '';
+        });
+
+        // Cerrar sesión
+        document.getElementById('logout').addEventListener('click', () => {
+            toggleVisibility('admin-page', 'main-container');
+        });
+
+        // Función para alternar la visibilidad de las secciones
+        function toggleVisibility(hideId, showId) {
+            document.getElementById(hideId).classList.add('hidden');
+            document.getElementById(showId).classList.remove('hidden');
+        }
+    </script>
+</body>
+</html>
